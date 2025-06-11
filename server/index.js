@@ -76,24 +76,27 @@ app.use("/posts",postRoutes);
 const PORT = process.env.PORT || 6001;
 
 mongoose
-.connect("mongodb+srv://aryanraj24032002:pSzZpINM1PVLxVoB@cluster0.5zq4urf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-.then(async()=>{
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(async () => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));
 
     const userCount = await User.countDocuments();
     const postCount = await Post.countDocuments();
 
     if (userCount === 0 && postCount === 0) {
-        await User.insertMany(users);
-        await Post.insertMany(posts);
-        console.log("Inserted mock data.");
+      await User.insertMany(users);
+      await Post.insertMany(posts);
+      console.log("Inserted mock data.");
     } else {
-        console.log("Mock data already exists, skipping insert.");
+      console.log("Mock data already exists, skipping insert.");
     }
-})
-.catch((err)=>{
-    console.log(`${err} did not connect`);
-})
+  })
+  .catch((err) => {
+    console.error(`${err} did not connect`);
+  });
 
 
 // # pSzZpINM1PVLxVoB 

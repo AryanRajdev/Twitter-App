@@ -11,16 +11,40 @@ export const getUser = async (req, res) => {
   }
 };
 
+// export const getUserFriends = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const user = await User.findById(id);
+
+//     const friends = await Promise.all(
+//       user.friends.map((id) => User.findById(id))
+//     );
+
+//     const formattedFriends = friends.map(
+//       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
+//         return { _id, firstName, lastName, occupation, location, picturePath };
+//       }
+//     );
+
+//     res.status(200).json(formattedFriends);
+//   } catch (err) {
+//     res.status(404).json({ msg: err.message });
+//   }
+// };
+
 export const getUserFriends = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
 
+    // Get all friends, filtering out nulls
     const friends = await Promise.all(
       user.friends.map((id) => User.findById(id))
     );
+    const validFriends = friends.filter(friend => friend !== null);
 
-    const formattedFriends = friends.map(
+    // Format only the valid friends
+    const formattedFriends = validFriends.map(
       ({ _id, firstName, lastName, occupation, location, picturePath }) => {
         return { _id, firstName, lastName, occupation, location, picturePath };
       }
@@ -31,6 +55,7 @@ export const getUserFriends = async (req, res) => {
     res.status(404).json({ msg: err.message });
   }
 };
+
 
 // Update
 

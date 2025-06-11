@@ -13,13 +13,13 @@ const PostsWidget = ({ userId, isProfile = false }) => {
       let response;
       if (isProfile && userId) {
         // Fetch posts only for the user
-        response = await fetch(`http://localhost:3001/posts/${userId}/posts`, {
+        response = await fetch(`https://twitter-app-backend-uvw8.onrender.com/posts/${userId}/posts`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
         // Fetch all posts
-        response = await fetch(`http://localhost:3001/posts`, {
+        response = await fetch(`https://twitter-app-backend-uvw8.onrender.com/posts`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
