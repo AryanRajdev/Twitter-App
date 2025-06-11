@@ -35,7 +35,24 @@ app.use(helmet.crossOriginResourcePolicy({policy:"cross-origin"}));
 app.use(morgan("common"));
 app.use(bodyParser.json({limit: "30mb" , extended : true}));
 app.use(bodyParser.urlencoded({limit : "30mb", extended : true}));
-app.use(cors());
+
+const allowedOrigins = [
+  "https://twitter-app-client-xhd4.onrender.com", // ✅ Your deployed frontend
+  "http://localhost:3000"                         // ✅ For local development
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("CORS policy: Not allowed by CORS"));
+  },
+  credentials: true
+}));
+
 app.use("/assets",express.static(path.join(__dirname,"public/assets")));
 
 
